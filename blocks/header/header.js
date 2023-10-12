@@ -103,7 +103,7 @@ export default async function decorate(block) {
     nav.id = 'nav';
     nav.innerHTML = html;
 
-    const classes = ['brand', 'sections', 'tools'];
+    const classes = ['brand', 'sections'];
     classes.forEach((c, i) => {
       const section = nav.children[i];
       if (section) section.classList.add(`nav-${c}`);
@@ -130,7 +130,7 @@ export default async function decorate(block) {
         <span class="nav-hamburger-icon"></span>
       </button>`;
     hamburger.addEventListener('click', () => toggleMenu(nav, navSections));
-    nav.prepend(hamburger);
+    nav.append(hamburger);
     nav.setAttribute('aria-expanded', 'false');
     // prevent mobile nav behavior on window resize
     toggleMenu(nav, navSections, isDesktop.matches);
