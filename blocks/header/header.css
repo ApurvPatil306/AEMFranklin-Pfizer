@@ -8,10 +8,8 @@ header .nav-wrapper {
 
 header nav {
   box-sizing: border-box;
-  display: grid;
-  grid-template:
-    'hamburger brand tools' var(--nav-height)
-    'sections sections sections' 1fr / auto 1fr auto;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 0 2em;
   margin: auto;
