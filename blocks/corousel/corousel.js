@@ -1,4 +1,4 @@
-import Carousel from '../../scripts/lib-carousel.js';
+import Carousel from '../../scripts/lib-corousel.js';
 import { createOptimizedPicture } from '../../scripts/lib-franklin.js';
 
 // Number of required columns in table
