@@ -89,6 +89,10 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
  * decorates the header, mainly the nav
  * @param {Element} block The header block element
  */
+
+function decorateSecondaryNav(block) {
+  
+}
 export default async function decorate(block) {
   // fetch nav content
   const navMeta = getMetadata('nav');
@@ -103,7 +107,7 @@ export default async function decorate(block) {
     nav.id = 'nav';
     nav.innerHTML = html;
 
-    const classes = ['brand', 'sections'];
+    const classes = ['brand', 'sections','secondary'];
     classes.forEach((c, i) => {
       const section = nav.children[i];
       if (section) section.classList.add(`nav-${c}`);
