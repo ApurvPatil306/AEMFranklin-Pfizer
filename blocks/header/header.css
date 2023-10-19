@@ -243,12 +243,11 @@ header nav .nav-sections ul > li > ul > li {
     align-items: center;
     position: relative;
     font-weight: 500;
-    width: 20%;
   }
   header nav .nav-sections > ul > li:after {
     content: '';
     position: absolute;
-    right: 100%;
+    right: 0%;
     height: 100%;
     width: 1px;
     background-color: grey;
@@ -259,6 +258,7 @@ header nav .nav-sections ul > li > ul > li {
   header nav .nav-sections > ul > li a {
     display: block;
     white-space: pre-wrap;
+    padding: 0 25px
   }
 
   header nav .nav-sections > ul > li > ul {
