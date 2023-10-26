@@ -98,15 +98,18 @@ export default async function decorate(block) {
   const navMeta = getMetadata('nav');
   const navPath = navMeta ? new URL(navMeta).pathname : '/nav';
   const resp = await fetch(`${navPath}.plain.html`);
+  const navSecondaryMeta = getMetadata('nav-secondary');
+  const navSecondaryPath = navSecondaryMeta ? new URL(navSecondaryMeta).pathname : '/nav-secondary';
+  const navSecondaryresp = await fetch(`${navSecondaryPath}.plain.html`);
 
-  if (resp.ok) {
+  if (resp.ok && navSecondaryresp.ok) {
     const html = await resp.text();
-
+    const navSecondaryHtml = await navSecondaryresp.text();
     // decorate nav DOM
     const nav = document.createElement('nav');
     nav.id = 'nav';
     nav.innerHTML = html;
-
+    
     const classes = ['brand', 'sections','secondary'];
     classes.forEach((c, i) => {
       const section = nav.children[i];
@@ -126,7 +129,9 @@ export default async function decorate(block) {
         });
       });
     }
-
+    const navSecondary = document.querySelector('.nav-secondary');
+    navSecondary.innerHTML = navSecondaryHtml; 
+    nav.prepend(navSecondary);
     // hamburger for mobile
     const hamburger = document.createElement('div');
     hamburger.classList.add('nav-hamburger');
