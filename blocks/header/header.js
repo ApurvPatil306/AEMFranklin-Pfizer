@@ -109,7 +109,7 @@ export default async function decorate(block) {
     // decorate nav DOM
     const nav = document.createElement('nav');
     nav.id = 'nav';
-    const navPrimary = dosument.createElement('div');
+    const navPrimary = document.createElement('div');
     
     
     const classes = ['brand', 'sections','secondary'];
