@@ -98,9 +98,10 @@ export default async function decorate(block) {
   const navMeta = getMetadata('nav');
   const navPath = navMeta ? new URL(navMeta).pathname : '/nav';
   const resp = await fetch(`${navPath}.plain.html`);
-  //const navSecondaryMeta = getMetadata('nav-secondary');
-  //const navSecondaryPath = navSecondaryMeta ? new URL(navSecondaryMeta).pathname : '/nav-secondary';
-  //const navSecondaryresp = await fetch(`${navSecondaryPath}.plain.html`);
+  const navSecondaryMeta = getMetadata('nav-secondary');
+  const navSecondaryPath = navSecondaryMeta ? new URL(navSecondaryMeta).pathname : '/nav-secondary';
+  const navSecondaryresp = await fetch(`${navSecondaryPath}.plain.html`);
+  console.log(navSecondaryresp);
 
   if (resp.ok && navSecondaryresp.ok) {
     const html = await resp.text();
