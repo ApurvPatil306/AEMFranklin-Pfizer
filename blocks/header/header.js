@@ -98,9 +98,9 @@ export default async function decorate(block) {
   const navMeta = getMetadata('nav');
   const navPath = navMeta ? new URL(navMeta).pathname : '/nav';
   const resp = await fetch(`${navPath}.plain.html`);
-  const navSecondaryMeta = getMetadata('nav-secondary');
-  const navSecondaryPath = navSecondaryMeta ? new URL(navSecondaryMeta).pathname : '/nav-secondary';
-  const navSecondaryresp = await fetch(`${navSecondaryPath}.plain.html`);
+  //const navSecondaryMeta = getMetadata('nav-secondary');
+  //const navSecondaryPath = navSecondaryMeta ? new URL(navSecondaryMeta).pathname : '/nav-secondary';
+  //const navSecondaryresp = await fetch(`${navSecondaryPath}.plain.html`);
 
   if (resp.ok && navSecondaryresp.ok) {
     const html = await resp.text();
@@ -129,9 +129,9 @@ export default async function decorate(block) {
         });
       });
     }
-    const navSecondary = document.querySelector('.nav-secondary');
-    navSecondary.innerHTML = navSecondaryHtml; 
-    nav.prepend(navSecondary);
+    //const navSecondary = document.querySelector('.nav-secondary');
+    //navSecondary.innerHTML = navSecondaryHtml; 
+    //nav.prepend(navSecondary);
     // hamburger for mobile
     const hamburger = document.createElement('div');
     hamburger.classList.add('nav-hamburger');
