@@ -130,9 +130,12 @@ export default async function decorate(block) {
         });
       });
     }
-    //const navSecondary = document.querySelector('.nav-secondary');
-    //navSecondary.innerHTML = navSecondaryHtml; 
-    //nav.prepend(navSecondary);
+   
+    const navSecondary = nav.querySelector('.nav-secondary');
+    if(navSecondary){
+    navSecondary.innerHTML = navSecondaryHtml; 
+    }
+    nav.prepend(navSecondary);
     // hamburger for mobile
     const hamburger = document.createElement('div');
     hamburger.classList.add('nav-hamburger');
