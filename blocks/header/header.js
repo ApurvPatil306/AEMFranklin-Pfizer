@@ -109,7 +109,7 @@ export default async function decorate(block) {
     // decorate nav DOM
     const nav = document.createElement('nav');
     nav.id = 'nav';
-    const navPrimary = document.createElement('div');
+    //const navPrimary = document.createElement('div');
     
     
     const classes = ['brand', 'sections','secondary'];
@@ -131,9 +131,9 @@ export default async function decorate(block) {
         });
       });
     }
-    navPrimary.append(nav.querySelector('.nav-brand'));
-    navPrimary.append(navSections)
-    nav.append(navPrimary);
+    //navPrimary.append(nav.querySelector('.nav-brand'));
+    //navPrimary.append(navSections)
+    //nav.append(navPrimary);
     const navSecondary = nav.querySelector('.nav-secondary');
     if(navSecondary){
     navSecondary.innerHTML = navSecondaryHtml; 
@@ -146,7 +146,7 @@ export default async function decorate(block) {
         <span class="nav-hamburger-icon"></span>
       </button>`;
     hamburger.addEventListener('click', () => toggleMenu(nav, navSections));
-    navPrimary.append(hamburger);
+    nav.append(hamburger);
     nav.setAttribute('aria-expanded', 'false');
     // prevent mobile nav behavior on window resize
     toggleMenu(nav, navSections, isDesktop.matches);
