@@ -86,8 +86,8 @@ function toggleMenu(nav, sections, forceExpanded = null) {
  * @param {Element} block The header block element
  */
 export default async function decorate(block) {
-  let locale = getLanguage();
-  locale = locale === 'en' ? 'global' : `${locale}/global`;
+  /*let locale = getLanguage();
+  locale = locale === 'en' ? 'global' : `${locale}/global`;*/
 
   // fetch nav content
   const navMeta = getMetadata('nav');
