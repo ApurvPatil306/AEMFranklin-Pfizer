@@ -104,7 +104,7 @@ export default async function decorate(block) {
   nav.id = 'nav';
   nav.innerHTML = html;
 
-  const classes = ['brand', 'sections', 'menu', 'support'];
+  const classes = ['menu', 'support','brand','sections'];
   classes.forEach((c, i) => {
     const section = nav.children[i];
     if (section) section.classList.add(`nav-${c}`);
