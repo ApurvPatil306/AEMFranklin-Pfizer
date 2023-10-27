@@ -1,4 +1,4 @@
-
+import { getMetadata, decorateIcons } from '../../scripts/lib-franklin.js';
 const isDesktop = window.matchMedia('(min-width: 768px)');
 function closeOnEscape(e) {
   if (e.code === 'Escape') {
