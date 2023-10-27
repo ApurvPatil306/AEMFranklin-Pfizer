@@ -21,7 +21,7 @@ header nav {
   font-family: var(--body-font-family);
 }
 @media (min-width:768px) {
-    header nav {
+    header .nav-wrapper {
       width: 80%;
     }
 }
@@ -142,7 +142,9 @@ header nav[aria-expanded="true"] .nav-hamburger-icon::after {
     visibility: hidden;
   }
 }
-
+header .nav-utility {
+  width: 100%;
+}
 /* brand */
 header .nav-brand {
   grid-area: brand;
@@ -243,6 +245,8 @@ header nav .nav-sections ul > li > ul > li {
     align-items: center;
     position: relative;
     font-weight: 500;
+    width: 20%;
+    font-size: 12px;
   }
   header nav .nav-sections > ul > li:after {
     content: '';

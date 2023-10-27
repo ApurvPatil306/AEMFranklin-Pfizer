@@ -1,5 +1,4 @@
 
-import { getMetadata, decorateIcons } from '../../scripts/lib-franklin.js';
 const isDesktop = window.matchMedia('(min-width: 768px)');
 function closeOnEscape(e) {
   if (e.code === 'Escape') {
@@ -17,6 +16,7 @@ function closeOnEscape(e) {
     }
   }
 }
+
 function openOnKeydown(e) {
   const focused = document.activeElement;
   const isNavDrop = focused.className === 'nav-drop';
@@ -86,94 +86,157 @@ function toggleMenu(nav, sections, forceExpanded = null) {
  * @param {Element} block The header block element
  */
 export default async function decorate(block) {
+  let locale = getLanguage();
+  locale = locale === 'en' ? 'global' : `${locale}/global`;
+
   // fetch nav content
   const navMeta = getMetadata('nav');
-  const navPath = navMeta ? new URL(navMeta).pathname : '/nav';
+  const navPath = navMeta ? new URL(navMeta).pathname : `/${locale}/nav`;
   const resp = await fetch(`${navPath}.plain.html`);
 
-  if (resp.ok) {
-    const html = await resp.text();
+  if (!resp.ok) {
+    return;
+  }
+  const html = await resp.text();
 
-    // decorate nav DOM
-    const nav = document.createElement('nav');
-    nav.id = 'nav';
-    nav.innerHTML = html;
+  // decorate nav DOM
+  const nav = document.createElement('nav');
+  nav.id = 'nav';
+  nav.innerHTML = html;
 
-    const classes = ['brand', 'sections', 'menu' , 'support'];
-    classes.forEach((c, i) => {
-      const section = nav.children[i];
-      if (section) section.classList.add(`nav-${c}`);
+  const classes = ['brand', 'sections', 'menu', 'support'];
+  classes.forEach((c, i) => {
+    const section = nav.children[i];
+    if (section) section.classList.add(`nav-${c}`);
+  });
+
+  // decorate brand
+  /*const langHref = getLanguage();
+  const brand = nav.querySelector('.nav-brand');
+  if (brand) {
+    const a = document.createElement('a');
+    a.href = langHref === 'en' ? '/' : `/${langHref}/`;
+    a.append(...brand.children);
+    brand.append(a);
+  }*/
+
+  // decorate dropdown navigation
+  /*const tabletsPage = document.querySelector('.tablets-page');
+  if (tabletsPage) {
+    document.querySelector('body').classList.add('hide-header-menu');
+  }*/
+  const sections = nav.querySelector('.nav-sections');
+  if (sections) {
+    sections.querySelectorAll(':scope > ul > li').forEach((navSection) => {
+      if (navSection.querySelector('ul')) {
+        navSection.classList.add('nav-drop');
+        const drop = navSection.querySelector('ul');
+        drop.remove();
+        const navText = document.createElement('span');
+        navText.innerHTML = navSection.innerHTML.trim();
+        navSection.innerHTML = '';
+        navSection.append(navText, drop);
+      }
+      navSection.addEventListener('click', () => {
+        const expanded = navSection.getAttribute('aria-expanded') === 'true';
+        toggleAllSections(sections);
+        navSection.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      });
     });
-
-    // decorate brand
-    const brand = nav.querySelector('.nav-brand');
-    if (brand) {
-      const a = document.createElement('a');
-      a.href = '/';
-      a.append(...brand.children);
-      brand.append(a);
-    }
-
-    // decorate dropdown navigation
-    const sections = nav.querySelector('.nav-sections');
-    if (sections) {
-      sections.querySelectorAll(':scope > ul > li').forEach((navSection) => {
-        if (navSection.querySelector('ul')) {
-          navSection.classList.add('nav-drop');
-          const drop = navSection.querySelector('ul');
-          drop.remove();
-          const navText = document.createElement('span');
-          navText.innerHTML = navSection.innerHTML.trim();
-          navSection.innerHTML = '';
-          navSection.append(navText, drop);
-        }
-        navSection.addEventListener('click', () => {
-          const expanded = navSection.getAttribute('aria-expanded') === 'true';
-          toggleAllSections(sections);
-          navSection.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-        });
-      });
-      const as = [...sections.querySelectorAll('a[href]')];
-      const current = as.find((a) => {
-        const { pathname } = new URL(a.href);
-        return pathname === window.location.pathname;
-      });
-      if (current) {
-        current.setAttribute('aria-current', 'page');
-        const currentDrop = current.closest('.nav-drop');
-        if (currentDrop) {
-          currentDrop.setAttribute('aria-expanded', true);
-        }
+    const as = [...sections.querySelectorAll('a[href]')];
+    const current = as.find((a) => {
+      const { pathname } = new URL(a.href);
+      return pathname === window.location.pathname;
+    });
+    if (current) {
+      current.setAttribute('aria-current', 'page');
+      const currentDrop = current.closest('.nav-drop');
+      if (currentDrop) {
+        currentDrop.setAttribute('aria-expanded', true);
       }
     }
-    // build utility links from menu for mobile
-    const menu = nav.querySelector('.nav-menu');
-    if (menu) {
-      const bold = menu.querySelectorAll('li');
-      if (bold) {
-        const utility = document.createElement('div');
-        utility.className = 'nav-utility';
-        const ul = document.createElement('ul');
-        const lis = [...bold].map((b) => b.closest('li'));
-        lis.forEach((li) => {
-          const a = li.querySelector('a[href]');
-          // remove unnecessary styling
-          const cleanA = document.createElement('a');
-          cleanA.href = a.href;
-          cleanA.textContent = a.textContent;
-          li.innerHTML = cleanA.outerHTML;
-          li.className = 'nav-utility-link';
-          // add to utility section for mobile
-          const utilityLi = document.createElement('li');
-          utilityLi.append(cleanA);
-          ul.append(utilityLi);
-        });
-        if (utility.hasChildNodes) {
-          utility.append(ul);
-          nav.prepend(utility);
-        }
+  }
+
+  // decorate cta
+  /*const cta = nav.querySelector('.nav-cta');
+  if (cta) {
+    const a = cta.querySelector('a');
+    if (a) {
+      a.parentElement.classList.add('button-container');
+      a.className = 'button';
+    }
+  }*/
+
+  // decorate social buttons
+  /*const social = nav.querySelector('.nav-social');
+  if (social) {
+    social.querySelectorAll('a[href]').forEach((a) => a.classList.add('button'));
+  }*/
+
+  // build utility links from menu for mobile
+  const menu = nav.querySelector('.nav-menu');
+  if (menu) {
+    const bold = menu.querySelectorAll('li strong');
+    if (bold) {
+      const utility = document.createElement('div');
+      utility.className = 'nav-utility';
+      const ul = document.createElement('ul');
+      const lis = [...bold].map((b) => b.closest('li'));
+      lis.forEach((li) => {
+        const a = li.querySelector('a[href]');
+        // remove unnecessary styling
+        const cleanA = document.createElement('a');
+        cleanA.href = a.href;
+        cleanA.textContent = a.textContent;
+        li.innerHTML = cleanA.outerHTML;
+        li.className = 'nav-utility-link';
+        // add to utility section for mobile
+        const utilityLi = document.createElement('li');
+        utilityLi.append(cleanA);
+        ul.append(utilityLi);
+      });
+      if (utility.hasChildNodes) {
+        utility.append(ul);
+        nav.prepend(utility);
       }
     }
+
+    // set language link path
+    /*const links = menu.querySelectorAll('li a');
+    const langLink = [...links].find((link) => ['English', 'Español'].includes(link.innerText));
+    if (langLink) {
+      if (langLink.innerText === 'English') {
+        // on espanol page
+        let path = window.location.pathname;
+        if (path.startsWith('/espanol')) {
+          path = path.substring(8);
+        }
+        langLink.href = path;
+      } else {
+        // on english page
+        let path = window.location.pathname;
+        if (!path.startsWith('/espanol')) {
+          path = `/espanol${path}`;
+        }
+        langLink.href = path;
+      }
+    }
+  }*/
+
+    // build access buttons
+    /*const access = nav.querySelector('.nav-access');
+    if (access) {
+      const utilities = access.querySelectorAll('li span.icon');
+      utilities.forEach((utility) => {
+        const button = document.createElement('button');
+        button.setAttribute('type', 'button');
+        button.append(utility.cloneNode());
+        const type = utility.className.split(' ').pop().replace('icon-', '');
+        button.id = `nav-access-${type}`;
+        utility.replaceWith(button);
+      });
+    }*/
+
     // hamburger for mobile
     const hamburger = document.createElement('div');
     hamburger.classList.add('nav-hamburger');
@@ -199,5 +262,12 @@ export default async function decorate(block) {
     navWrapper.append(nav);
     block.innerHTML = '';
     block.append(navWrapper);
+
+    // add hide class
+    const sectionHide = document.querySelector('.hide-menu');
+    if (sectionHide) {
+      const li = document.querySelector('.nav-menu ul li:last-child');
+      li.classList.add('hidden');
+    }
   }
 }
